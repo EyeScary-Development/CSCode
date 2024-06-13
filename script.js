@@ -284,7 +284,7 @@ document.addEventListener('keydown', function(event) {
 function tester(){
   if (lang.toLowerCase()=="javascript"){
     localStorage.setItem("torun", editor.getValue());
-    showpreview("js.html");
+    showpreview("javascript.html");
   } else if (lang.toLowerCase()=="css"){
     localStorage.setItem("torun", editor.getValue());
     showpreview("css.html");
