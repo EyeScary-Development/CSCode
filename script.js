@@ -7,14 +7,16 @@ document.addEventListener("DOMContentLoaded", function () {
   var queriedLang = getQueryVariable("lang");
   if (queriedLang != "no"){
     editor.session.setMode("ace/mode/" + queriedLang.toLowerCase());
+    if (toContinue != "no"){
+      loadsave()
+    }
   } else {
-    changelang();
-  }
-  if (toContinue != "no"){
-    loadsave()
-    if (queriedLang == "no"){
+    if (toContinue != "no"){
+      loadsave()
       lang=prompt("What language would you like to open that project in?")
       editor.session.setMode("ace/mode/" + lang.toLowerCase())
+    } else {
+      changelang();
     }
   }
 });
