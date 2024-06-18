@@ -3,11 +3,19 @@ let lastset = "none";
 let lang="";
 document.addEventListener("DOMContentLoaded", function () {
   initialise(getCookie("theme"));
-  var lang = getQueryVariable("lang");
-  if (lang != "no"){
-    editor.session.setMode("ace/mode/" + lang.toLowerCase());
+  var toContinue = getQueryVariable("continue")
+  var queriedLang = getQueryVariable("lang");
+  if (queriedLang != "no"){
+    editor.session.setMode("ace/mode/" + queriedLang.toLowerCase());
   } else {
     changelang();
+  }
+  if (toContinue != "no"){
+    loadsave()
+    if (queriedLang == "no"){
+      lang=prompt("What language would you like to open that project in?")
+      editor.session.setMode("ace/mode/" + lang.toLowerCase())
+    }
   }
 });
 
