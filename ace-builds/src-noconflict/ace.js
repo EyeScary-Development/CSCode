@@ -11618,17 +11618,6 @@ function bindKey(win, mac) {
     return {win: win, mac: mac};
 }
 exports.commands = [{
-    name: "showSettingsMenu",
-    description: "Show settings menu",
-    bindKey: bindKey("Ctrl-,", "Command-,"),
-    exec: function(editor) {
-        config.loadModule("ace/ext/settings_menu", function(module) {
-            module.init(editor);
-            editor.showSettingsMenu();
-        });
-    },
-    readOnly: true
-}, {
     name: "goToNextError",
     description: "Go to next error",
     bindKey: bindKey("Alt-E", "F4"),
@@ -11771,15 +11760,7 @@ exports.commands = [{
             editor.findPrevious();
     },
     readOnly: true
-}, {
-    name: "find",
-    description: "Find",
-    bindKey: bindKey("Ctrl-F", "Command-F"),
-    exec: function(editor) {
-        config.loadModule("ace/ext/searchbox", function(e) {e.Search(editor);});
-    },
-    readOnly: true
-}, {
+},{
     name: "overwrite",
     description: "Overwrite",
     bindKey: "Insert",
@@ -12133,14 +12114,7 @@ exports.commands = [{
     exec: function(editor) { editor.modifyNumber(-1); },
     scrollIntoView: "cursor",
     multiSelectAction: "forEach"
-}, {
-    name: "replace",
-    description: "Replace",
-    bindKey: bindKey("Ctrl-H", "Command-Option-F"),
-    exec: function(editor) {
-        config.loadModule("ace/ext/searchbox", function(e) {e.Search(editor, true);});
-    }
-}, {
+},{
     name: "undo",
     description: "Undo",
     bindKey: bindKey("Ctrl-Z", "Command-Z"),

@@ -1,20 +1,20 @@
 let editor = "";
 let lastset = "none";
-let lang="";
+let lang = "";
 document.addEventListener("DOMContentLoaded", function () {
   initialise(getCookie("theme"));
-  var toContinue = getQueryVariable("continue")
+  var toContinue = getQueryVariable("continue");
   var queriedLang = getQueryVariable("lang");
-  if (queriedLang != "no"){
+  if (queriedLang != "no") {
     editor.session.setMode("ace/mode/" + queriedLang.toLowerCase());
-    if (toContinue != "no"){
-      loadsave()
+    if (toContinue != "no") {
+      loadsave();
     }
   } else {
-    if (toContinue != "no"){
-      loadsave()
-      lang=prompt("What language would you like to open that project in?")
-      editor.session.setMode("ace/mode/" + lang.toLowerCase())
+    if (toContinue != "no") {
+      loadsave();
+      lang = prompt("What language would you like to open that project in?");
+      editor.session.setMode("ace/mode/" + lang.toLowerCase());
     } else {
       changelang();
     }
@@ -24,12 +24,12 @@ document.addEventListener("DOMContentLoaded", function () {
 function getQueryVariable(variable) {
   var query = window.location.search.substring(1);
   var vars = query.split("&");
-  for (var i=0;i<vars.length;i++) {
+  for (var i = 0; i < vars.length; i++) {
     var pair = vars[i].split("=");
     if (pair[0] == variable) {
       return pair[1];
     }
-  } 
+  }
   return "no";
 }
 
@@ -61,7 +61,7 @@ function themechange(string) {
   setCookie("theme", string, 365);
   console.log("success!");
   if (confirm("change theme?")) {
-    hideSettings()
+    hideSettings();
     initialise(string);
   } else {
     alert("next time you reload CSCode, the changes will apply");
@@ -73,17 +73,19 @@ function changelang() {
   editor.session.setMode("ace/mode/" + lang.toLowerCase());
 }
 
-function tabchanger(){
-  var usin = parseInt(prompt("change tab size to:"))
-  if (usin){
-      editor.session.setOptions({ tabSize: usin, useSoftTabs: true });
-      setCookie("tabsize", usin, 365);
+function tabchanger() {
+  var usin = parseInt(prompt("change tab size to:"));
+  if (usin) {
+    editor.session.setOptions({ tabSize: usin, useSoftTabs: true });
+    setCookie("tabsize", usin, 365);
   }
-  console.log(getCookie("tabsize"))
+  console.log(getCookie("tabsize"));
 }
 
-function fontchange(){
-  var font = prompt("what font do you want to use? (monospace fonts available by default in CSS only)");
+function fontchange() {
+  var font = prompt(
+    "what font do you want to use? (monospace fonts available by default in CSS only)",
+  );
   var size = prompt("What font size do you want?") + "pt";
   var weight = prompt("what font weight do you want? (100-900)");
   setCookie("ffamily", font, 365);
@@ -97,74 +99,84 @@ function fontchange(){
   }
 }
 
-function linewraptoggle(){
-  if (getCookie("linewrapping")=="false" || getCookie("linewrapping")==""){
+function linewraptoggle() {
+  if (getCookie("linewrapping") == "false" || getCookie("linewrapping") == "") {
     editor.session.setUseWrapMode(true);
     setCookie("linewrapping", "true", 365);
-  } else if (getCookie("linewrapping")=="true") {
+  } else if (getCookie("linewrapping") == "true") {
     editor.session.setUseWrapMode(false);
     setCookie("linewrapping", "false", 365);
   }
-  console.log(getCookie("linewrapping"))
+  console.log(getCookie("linewrapping"));
 }
 
 function initialise(string) {
   editor = ace.edit("editor");
-  if (string == "" || string == "default"){
+  if (string == "" || string == "default") {
     console.log("changing css..");
     document.getElementById("theme").href = "default.css";
     console.log("success! Changing ace instance theme");
     editor.setTheme("ace/theme/textmate");
     console.log("success!");
-  } else{
+  } else {
     console.log("changing css..");
     document.getElementById("theme").href = string + ".css";
     console.log("success! Changing ace instance theme");
     editor.setTheme("ace/theme/" + string);
     console.log("success!");
   }
-  if (getCookie("linewrapping")=="false"||getCookie("linewrapping")==""){
+  if (getCookie("linewrapping") == "false" || getCookie("linewrapping") == "") {
     editor.session.setUseWrapMode(false);
-  } else if (getCookie("linewrapping")=="true") {
+  } else if (getCookie("linewrapping") == "true") {
     editor.session.setUseWrapMode(true);
   }
   console.log(getCookie("linewrapping"));
-  editor.session.setOptions({ tabSize: getCookie("tabsize"), useSoftTabs: true });
+  editor.session.setOptions({
+    tabSize: getCookie("tabsize"),
+    useSoftTabs: true,
+  });
   console.log(getCookie("tabsize"));
-  if (getCookie("ffamily") != "" && getCookie("fsize") != "" && getCookie("fweight") != ""){
-    editor.setOptions({ fontFamily: getCookie("ffamily"), fontSize: getCookie("fsize")});
-    document.getElementById('editor').style.fontWeight = getCookie("fweight");
+  if (
+    getCookie("ffamily") != "" &&
+    getCookie("fsize") != "" &&
+    getCookie("fweight") != ""
+  ) {
+    editor.setOptions({
+      fontFamily: getCookie("ffamily"),
+      fontSize: getCookie("fsize"),
+    });
+    document.getElementById("editor").style.fontWeight = getCookie("fweight");
   }
   editor.setOptions({
-  maxLines: 'auto',
-  minLines: 'auto',
-  autoScrollEditorIntoView: true
+    maxLines: "auto",
+    minLines: "auto",
+    autoScrollEditorIntoView: true,
   });
 }
 
-function dropdown(){
-    if (lastset == "block"){
-        document.getElementById("dropdown-content").style.display="none"
-        lastset = "none"
-    } else {
-        document.getElementById("dropdown-content").style.display="block"
-        lastset = "block"
-    }
+function dropdown() {
+  if (lastset == "block") {
+    document.getElementById("dropdown-content").style.display = "none";
+    lastset = "none";
+  } else {
+    document.getElementById("dropdown-content").style.display = "block";
+    lastset = "block";
+  }
 }
 
-function dl(){
+function dl() {
   const data = editor.getValue();
-  const blob = new Blob([data], { type: 'text/plain' });
+  const blob = new Blob([data], { type: "text/plain" });
   const url = URL.createObjectURL(blob);
   downloadURI(url, prompt("save the file as? [include extension]"));
 }
 
-function hideSettings(){
+function hideSettings() {
   document.getElementById("settings").style.display = "none";
   document.getElementById("codeeditor").style.display = "block";
 }
 
-function showSettings(){
+function showSettings() {
   document.getElementById("settings").style.display = "block";
   document.getElementById("codeeditor").style.display = "none";
 }
@@ -177,128 +189,149 @@ function downloadURI(uri, name) {
   link.remove();
 }
 
-function up(){
+function up() {
   console.log("upSave requested");
-  var input = document.createElement('input');
-  input.type = 'file';
+  var input = document.createElement("input");
+  input.type = "file";
   input.onchange = (e) => {
     var file = e.target.files[0];
     var reader = new FileReader();
-    reader.readAsText(file, 'UTF-8');
+    reader.readAsText(file, "UTF-8");
     reader.onload = (readerEvent) => {
       var content = readerEvent.target.result;
       console.log(content);
       editor.setValue(content);
-    }
-  }
+    };
+  };
 
   try {
-      input.click();
-      console.log("load success!");
-  } catch(error) {
-      console.log("error: " + error);
+    input.click();
+    console.log("load success!");
+  } catch (error) {
+    console.log("error: " + error);
   }
-
 }
 
-function savetocookie(){
-  var usin = prompt("write to save name:")
+function savetocookie() {
+  var usin = prompt("write to save name:");
   if (localStorage.getItem(usin) == null) {
     localStorage.setItem(usin, editor.getValue());
-    if (localStorage.getItem("itemlist")==null){
-      localStorage.setItem("itemlist", "- " + usin + "\n")
+    if (localStorage.getItem("itemlist") == null) {
+      localStorage.setItem("itemlist", "- " + usin + "\n");
     } else {
-      let ls=localStorage.getItem("itemlist")
-      localStorage.setItem("itemlist", ls + "- " + usin + "\n")
+      let ls = localStorage.getItem("itemlist");
+      localStorage.setItem("itemlist", ls + "- " + usin + "\n");
     }
   } else if (confirm("overwrite save?")) {
     localStorage.setItem(usin, editor.getValue());
   }
 }
 
-function loadsave(){
-  if (localStorage.getItem("itemlist")!=null){
-    usin = prompt("Here is a list of all of your saves, choose one: \n \n" + localStorage.getItem("itemlist"))
+function loadsave() {
+  if (localStorage.getItem("itemlist") != null) {
+    usin = prompt(
+      "Here is a list of all of your saves, choose one: \n \n" +
+        localStorage.getItem("itemlist"),
+    );
   } else {
-    alert("Sorry, you don't have any saves yet, if this is due to a bug in an update, we apologise")
+    alert(
+      "Sorry, you don't have any saves yet, if this is due to a bug in an update, we apologise",
+    );
   }
-  if(confirm("correct save?: \n \n" + localStorage.getItem(usin))){
+  if (confirm("correct save?: \n \n" + localStorage.getItem(usin))) {
     editor.setValue(localStorage.getItem(usin));
   } else {
-    console.log("loadsave cancelled successfully")
+    console.log("loadsave cancelled successfully");
   }
 }
 
-function showpreview(lang){
-  if (document.getElementById("preview").style.display === "none"){
-  document.getElementById("preview").style.display="block";
-  document.getElementById("codeeditor").style.display = "none";
-  document.getElementById("previewframe").src=lang;
-
+function showpreview(lang) {
+  if (document.getElementById("preview").style.display === "none") {
+    document.getElementById("preview").style.display = "block";
+    document.getElementById("codeeditor").style.display = "none";
+    document.getElementById("previewframe").src = lang;
   } else {
-    document.getElementById("preview").style.display="none";
-    document.getElementById("codeeditor").style.display="block"
+    document.getElementById("preview").style.display = "none";
+    document.getElementById("codeeditor").style.display = "block";
   }
 }
 
-function findandrep(){
+function findandrep() {
   editor.find(prompt("what do you want to replace"), {
     backwards: true,
     wrap: false,
     caseSensitive: false,
     wholeWord: false,
-    regExp: false
+    regExp: false,
   });
   editor.replaceAll(prompt("what do you want to refactor these all to?"));
 }
 
-function find(){
+function find() {
   var range = editor.find(prompt("What do you want to find?"), {
     backwards: true,
     wrap: false,
     caseSensitive: false,
     wholeWord: false,
-    regExp: false
-});
-};
+    regExp: false,
+  });
+}
 
-document.addEventListener('keydown', function(event) {
-  if (event.ctrlKey && event.key === '.') {
+document.addEventListener("keydown", function (event) {
+  if (
+    (event.ctrlKey && event.key === "h") ||
+    (event.metaKey && event.key === "h")
+  ) {
     event.preventDefault();
     findandrep();
-  } else if (event.ctrlKey && event.code === 'Space'){
+  } else if (
+    (event.ctrlKey && event.key === "f") ||
+    (event.metaKey && event.key === "f")
+  ) {
     event.preventDefault();
     find();
-  } else if (event.ctrlKey && event.key === 's'){
+  } else if (
+    (event.ctrlKey && event.key === "s") ||
+    (event.metaKey && event.key === "s")
+  ) {
     event.preventDefault();
     dl();
-  } else if (event.ctrlKey && event.key === 'i'){
+  } else if (
+    (event.ctrlKey && event.key === "i") ||
+    (event.metaKey && event.key === "i")
+  ) {
     event.preventDefault();
     up();
-  } else if (event.altKey && event.key === ','){
+  } else if (
+    (event.ctrlKey && event.key === ",") ||
+    (event.metaKey && event.key === ",")
+  ) {
     event.preventDefault();
     showSettings();
-  } else if (event.altKey && event.key === 's'){
+  } else if (event.altKey && event.key === "s") {
     event.preventDefault();
     savetocookie();
-  } else if (event.altKey && event.key === 'i'){
+  } else if (event.altKey && event.key === "i") {
     event.preventDefault();
     loadsave();
-  } else if (event.ctrlKey && event.key === 'r'){
+  } else if (
+    (event.ctrlKey && event.key === "r") ||
+    (event.metaKey && event.key === "r")
+  ) {
     event.preventDefault();
     localStorage.setItem("torun", editor.getValue());
-    showpreview(lang+".html");
-  } 
+    showpreview(lang + ".html");
+  }
 });
 
-function tester(){
-  if (lang.toLowerCase()=="javascript"){
+function tester() {
+  if (lang.toLowerCase() == "javascript") {
     localStorage.setItem("torun", editor.getValue());
     showpreview("javascript.html");
-  } else if (lang.toLowerCase()=="css"){
+  } else if (lang.toLowerCase() == "css") {
     localStorage.setItem("torun", editor.getValue());
     showpreview("css.html");
-  } else if (lang.toLowerCase()=="html"){
+  } else if (lang.toLowerCase() == "html") {
     localStorage.setItem("torun", editor.getValue());
     showpreview("html.html");
   }
